@@ -1,0 +1,50 @@
+{% extends 'albums/base.html' %}
+
+{% block content %}
+<div class="sm:flex sm:items-center sm:justify-between mb-8">
+    <div>
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900">All Photo Albums</h1>
+        <p class="mt-2 text-sm text-slate-500">Explore collections managed by our album administrators.</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {% for album in albums %}
+        <div class="group relative overflow-hidden border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all duration-300 flex flex-col justify-between min-h-[220px] bg-white">
+            
+            {% if album.photos.first %}
+                <div class="absolute inset-0 z-0 bg-cover bg-center opacity-20 group-hover:scale-105 group-hover:opacity-25 transition-all duration-500 pointer-events-none" 
+                     style="background-image: url('{{ album.photos.first.image.url }}');">
+                </div>
+            {% else %}
+                <div class="absolute inset-0 z-0 bg-gradient-to-br from-slate-50 to-indigo-50/30 opacity-100 pointer-events-none"></div>
+            {% endif %}
+
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-x-4">
+                    <h3 class="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight">
+                        {{ album.title }}
+                    </h3>
+                </div>
+                <p class="mt-3 text-sm text-slate-600 font-medium line-clamp-3 leading-relaxed">
+                    {{ album.description|default:"No description provided for this collection." }}
+                </p>
+            </div>
+
+            <div class="relative z-10 mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                <span class="text-slate-500 font-medium">Admin: <strong class="text-slate-800 font-semibold">{{ album.owner.username }}</strong></span>
+                <a href="{% url 'album_detail' album.pk %}" class="font-bold text-indigo-600 hover:text-indigo-500 inline-flex items-center gap-1 bg-white/80 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/40 shadow-sm">
+                    View Gallery <span class="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-span-full text-center py-12 bg-white rounded-xl border border-dashed border-slate-300">
+            <p class="text-sm text-slate-500">No albums found in the system yet.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'album_create' %}" class="mt-4 inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-500">Create one now &rarr;</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
