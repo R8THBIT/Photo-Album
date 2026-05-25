@@ -132,11 +132,11 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-fallback-development-key')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
